@@ -13,7 +13,7 @@ export default function BugMutatedState() {
   const [count, setCount] = useState(0);
 
   function handleAdd() {
-    setCount(count + 1);
+    setCount((previous) => previous + 1);
   }
 
   return (
