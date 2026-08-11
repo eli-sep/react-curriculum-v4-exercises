@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styles from './SnackForm.module.css';
 
 export default function SnackForm({
@@ -8,24 +9,38 @@ export default function SnackForm({
   className,
 }) {
   const isEditing = Boolean(editingSnack);
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const name = formData.get('name');
-    const rating = formData.get('rating');
-
+  const [name, setName] = useState('');
+  const [rating, setRating] = useState('');
+  const [touched, setTouched] = useState({ name: false, rating: false });
+  useEffect(() => {
     if (isEditing) {
-      updateSnack(editingSnack.id, name, rating);
+      setName(editingSnack.name);
+      setRating(editingSnack.rating);
     } else {
-      addSnack(name, rating);
-      e.target.reset();
+      setName('');
+      setRating('');
     }
-  }
+
+    setTouched({ name: false, rating: false });
+  }, [editingSnack]);
+
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.target);
+  //   const name = formData.get('name');
+  //   const rating = formData.get('rating');
+
+  //   if (isEditing) {s
+  //     updateSnack(editingSnack.id, name, rating);
+  //   } else {
+  //     addSnack(name, rating);
+  //     e.target.reset();
+  //   }
+  // }
 
   return (
     <form
-      onSubmit={handleSubmit}
+      // onSubmit={handleSubmit}
       className={`${styles.form} ${className || ''}`}
     >
       <h3 className={styles['form-title']}>
@@ -37,10 +52,14 @@ export default function SnackForm({
         <input
           type="text"
           name="name"
-          defaultValue={isEditing ? editingSnack.name : ''}
+          value={name}
           required
           className={styles['field-input']}
           placeholder="Enter snack name"
+          onChange={(event) => setName(event.target.value)}
+          onFocus={() => {
+            setTouched((prev) => ({ ...prev, name: true }));
+          }}
         />
       </div>
 
@@ -49,12 +68,16 @@ export default function SnackForm({
         <input
           type="number"
           name="rating"
-          defaultValue={isEditing ? editingSnack.rating : ''}
+          value={rating}
           required
           min="1"
           max="5"
           className={styles['field-input']}
           placeholder="Rate 1-5"
+          onChange={(event) => setRating(event.target.value)}
+          onFocus={() => {
+            setTouched((prev) => ({ ...prev, rating: true }));
+          }}
         />
       </div>
 
