@@ -24,6 +24,17 @@ export default function SnackForm({
     setTouched({ name: false, rating: false });
   }, [editingSnack]);
 
+  const validateName = () => name.trim() !== '';
+  const validateRating = () => rating.trim() !== '';
+  const getNameError = () =>
+    !validateName() && touched.name && 'Snack name is required';
+  const getRatingError = () =>
+    !validateRating() && touched.rating && 'Please select a rating';
+
+  console.log('Name error:', getNameError());
+  console.log('Rating error:', getRatingError());
+  console.log(!validateRating(), touched.rating, !!`Please select a rating`);
+
   // function handleSubmit(e) {
   //   e.preventDefault();
   //   const formData = new FormData(e.target);
