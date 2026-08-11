@@ -25,15 +25,11 @@ export default function SnackForm({
   }, [editingSnack]);
 
   const validateName = () => name.trim() !== '';
-  const validateRating = () => rating.trim() !== '';
+  const validateRating = () => rating !== '';
   const getNameError = () =>
     !validateName() && touched.name && 'Snack name is required';
   const getRatingError = () =>
     !validateRating() && touched.rating && 'Please select a rating';
-
-  console.log('Name error:', getNameError());
-  console.log('Rating error:', getRatingError());
-  console.log(!validateRating(), touched.rating, !!`Please select a rating`);
 
   // function handleSubmit(e) {
   //   e.preventDefault();
@@ -71,6 +67,7 @@ export default function SnackForm({
             setTouched((prev) => ({ ...prev, name: true }));
           }}
         />
+        {getNameError() && <div className={styles.error}>{getNameError()}</div>}
       </div>
 
       <div className={styles['field-container']}>
@@ -88,6 +85,9 @@ export default function SnackForm({
             setTouched((prev) => ({ ...prev, rating: true }));
           }}
         />
+        {getRatingError() && (
+          <div className={styles.error}>{getRatingError()}</div>
+        )}
       </div>
 
       <div className={styles['button-container']}>
