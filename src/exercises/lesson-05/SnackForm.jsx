@@ -31,23 +31,26 @@ export default function SnackForm({
   const getRatingError = () =>
     !validateRating() && touched.rating && 'Please select a rating';
 
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.target);
-  //   const name = formData.get('name');
-  //   const rating = formData.get('rating');
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  //   if (isEditing) {s
-  //     updateSnack(editingSnack.id, name, rating);
-  //   } else {
-  //     addSnack(name, rating);
-  //     e.target.reset();
-  //   }
-  // }
+    if (validateName() && validateRating()) {
+      if (isEditing) {
+        updateSnack(editingSnack.id, name, rating);
+      } else {
+        addSnack(name, rating);
+        setName('');
+        setRating('');
+        setTouched({ name: false, rating: false });
+      }
+    } else {
+      setTouched({ name: true, rating: true });
+    }
+  }
 
   return (
     <form
-      // onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       className={`${styles.form} ${className || ''}`}
     >
       <h3 className={styles['form-title']}>
